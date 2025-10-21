@@ -10,9 +10,9 @@ import (
 func NewRouter(handlers *handler.Handlers) *mux.Router {
 	r := mux.NewRouter()
 
-	api := r.PathPrefix("api/v1").Subrouter()
+	api := r.PathPrefix("/api/v1").Subrouter()
 
-	api.HandleFunc("health", handlers.HealthHandler.GetHealth).Methods("GET")
+	api.HandleFunc("/health", handlers.HealthHandler.HealthCheck).Methods("GET")
 
 	return r
 }
