@@ -2,5 +2,11 @@
 package handler
 
 type Handlers struct {
-	HealthHandler HealthHandler
+	HealthHandler *HealthHandler
+}
+
+func NewHandlers() *Handlers {
+	healthHandler := NewHealthHandler()
+
+	return &Handlers{HealthHandler: healthHandler}
 }
