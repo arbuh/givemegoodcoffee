@@ -12,7 +12,11 @@ func NewRouter(handlers *handler.Handlers) *mux.Router {
 
 	api := r.PathPrefix("/api/v1").Subrouter()
 
+	// Health endpoints
 	api.HandleFunc("/health", handlers.HealthHandler.HealthCheck).Methods("GET")
+
+	// Coffee spot endpoints
+	api.HandleFunc("/coffeespot/{id}", handlers.CoffeeSpotHandler.GetCoffeeSpot).Methods("GET")
 
 	return r
 }

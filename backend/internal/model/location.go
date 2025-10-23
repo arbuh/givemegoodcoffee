@@ -6,8 +6,8 @@ type Location struct {
 }
 
 type GeoPoint struct {
-	Lat float32 `json:"lat"`
-	Lon float32 `json:"lon"`
+	Lat string `json:"lat"`
+	Lon string `json:"lon"`
 }
 
 type Address struct {

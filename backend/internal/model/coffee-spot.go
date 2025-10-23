@@ -2,6 +2,7 @@
 package model
 
 type CoffeeSpot struct {
+	Id       string         `json:"id"`
 	Name     string         `json:"name"`
 	Type     CoffeeSpotType `json:"type"`
 	Location Location       `json:"location"`
@@ -18,6 +19,8 @@ const (
 	Other       CoffeeSpotType = "other"
 )
 
+/*
+We don't need this functionality yet
 // TODO: add a unit-test
 func (t CoffeeSpotType) IsValid() bool {
 	switch t {
@@ -27,3 +30,4 @@ func (t CoffeeSpotType) IsValid() bool {
 		return false
 	}
 }
+*/
