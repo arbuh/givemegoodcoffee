@@ -1,8 +1,12 @@
 // Package model contains domain models
 package model
 
+import (
+	"github.com/google/uuid"
+)
+
 type CoffeeSpot struct {
-	Id       string         `json:"id"`
+	ID       uuid.UUID      `json:"id"`
 	Name     string         `json:"name"`
 	Type     CoffeeSpotType `json:"type"`
 	Location Location       `json:"location"`

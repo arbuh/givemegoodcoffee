@@ -5,6 +5,7 @@ import (
 	"givemegoodcoffee/internal/model"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
@@ -17,14 +18,20 @@ func NewCoffeeSpotHandler() *CoffeeSpotHandler {
 func (h CoffeeSpotHandler) GetCoffeeSpot(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	id := vars["id"]
-	if id == "" {
+	rawID := vars["id"]
+	if rawID == "" {
 		http.Error(w, "The path parameter 'id' is mandatory", http.StatusBadRequest)
 		return
 	}
 
+	id, error := uuid.Parse(rawID)
+	if error != nil {
+		http.Error(w, "The path parameter 'id' must be a valid UUID", http.StatusBadRequest)
+		return
+	}
+
 	dummySpot := model.CoffeeSpot{
-		Id:   id,
+		ID:   id,
 		Name: "Frappie-Lattie Cafe",
 		Type: model.CoffeeShop,
 		Location: model.Location{
