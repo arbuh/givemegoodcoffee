@@ -8,6 +8,7 @@ type Handlers struct {
 
 func NewHandlers() *Handlers {
 	healthHandler := NewHealthHandler()
+
 	coffeeSpotHandler := NewCoffeeSpotHandler()
 
 	return &Handlers{HealthHandler: healthHandler, CoffeeSpotHandler: coffeeSpotHandler}

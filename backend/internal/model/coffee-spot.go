@@ -6,10 +6,10 @@ import (
 )
 
 type CoffeeSpot struct {
-	ID       uuid.UUID      `json:"id"`
-	Name     string         `json:"name"`
-	Type     CoffeeSpotType `json:"type"`
-	Location Location       `json:"location"`
+	ID       uuid.UUID
+	Name     string
+	Type     CoffeeSpotType
+	Location Location
 }
 
 type CoffeeSpotType string

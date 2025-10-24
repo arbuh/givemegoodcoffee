@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"givemegoodcoffee/internal/http/mapper"
 	"givemegoodcoffee/internal/model"
 	"net/http"
 
@@ -9,10 +10,11 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type CoffeeSpotHandler struct{}
+type CoffeeSpotHandler struct{ CoffeeSpotMapper *mapper.CoffeeSpotMapper }
 
 func NewCoffeeSpotHandler() *CoffeeSpotHandler {
-	return &CoffeeSpotHandler{}
+	coffeeSpotMapper := mapper.NewCoffeeSpotMapper()
+	return &CoffeeSpotHandler{coffeeSpotMapper}
 }
 
 func (h CoffeeSpotHandler) GetCoffeeSpot(w http.ResponseWriter, r *http.Request) {
@@ -48,7 +50,9 @@ func (h CoffeeSpotHandler) GetCoffeeSpot(w http.ResponseWriter, r *http.Request)
 
 	w.Header().Set("Content-Type", "application/json")
 
-	err := json.NewEncoder(w).Encode(dummySpot)
+	response := h.CoffeeSpotMapper.ToResponse(&dummySpot)
+
+	err := json.NewEncoder(w).Encode(response)
 	if err != nil {
 		http.Error(w, "Cannot serialize a model to JSON", http.StatusInternalServerError)
 		return

@@ -1,16 +1,16 @@
 package model
 
 type Location struct {
-	GeoPoint GeoPoint `json:"geoPoint"`
-	Address  Address  `json:"address"`
+	GeoPoint GeoPoint
+	Address  Address
 }
 
 type GeoPoint struct {
-	Lat string `json:"lat"`
-	Lon string `json:"lon"`
+	Lat string
+	Lon string
 }
 
 type Address struct {
-	CountryCode      string `json:"countryCode"`
-	FormattedAddress string `json:"address"`
+	CountryCode      string
+	FormattedAddress string
 }
