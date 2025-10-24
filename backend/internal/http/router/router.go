@@ -2,7 +2,7 @@
 package router
 
 import (
-	"givemegoodcoffee/internal/handler"
+	"givemegoodcoffee/internal/http/handler"
 
 	"github.com/gorilla/mux"
 )

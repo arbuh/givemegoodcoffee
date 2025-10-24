@@ -1,8 +1,8 @@
 package main
 
 import (
-	"givemegoodcoffee/internal/handler"
-	"givemegoodcoffee/internal/router"
+	"givemegoodcoffee/internal/http/handler"
+	"givemegoodcoffee/internal/http/router"
 	"log"
 	"net/http"
 )
