@@ -10,11 +10,14 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type CoffeeSpotHandler struct{ CoffeeSpotMapper *mapper.CoffeeSpotMapper }
+type CoffeeSpotHandler struct {
+	coffeeSpotMapper *mapper.CoffeeSpotMapper
+	errorHander      *ErrorHander
+}
 
-func NewCoffeeSpotHandler() *CoffeeSpotHandler {
+func NewCoffeeSpotHandler(errorHander *ErrorHander) *CoffeeSpotHandler {
 	coffeeSpotMapper := mapper.NewCoffeeSpotMapper()
-	return &CoffeeSpotHandler{coffeeSpotMapper}
+	return &CoffeeSpotHandler{coffeeSpotMapper, errorHander}
 }
 
 func (h CoffeeSpotHandler) GetCoffeeSpot(w http.ResponseWriter, r *http.Request) {
@@ -22,13 +25,13 @@ func (h CoffeeSpotHandler) GetCoffeeSpot(w http.ResponseWriter, r *http.Request)
 
 	rawID := vars["id"]
 	if rawID == "" {
-		http.Error(w, "The path parameter 'id' is mandatory", http.StatusBadRequest)
+		h.errorHander.WriteClientError(w, "The path parameter 'id' is mandatory", http.StatusBadRequest)
 		return
 	}
 
 	id, error := uuid.Parse(rawID)
 	if error != nil {
-		http.Error(w, "The path parameter 'id' must be a valid UUID", http.StatusBadRequest)
+		h.errorHander.WriteClientError(w, "The path parameter 'id' must be a valid UUID", http.StatusBadRequest)
 		return
 	}
 
@@ -50,11 +53,11 @@ func (h CoffeeSpotHandler) GetCoffeeSpot(w http.ResponseWriter, r *http.Request)
 
 	w.Header().Set("Content-Type", "application/json")
 
-	response := h.CoffeeSpotMapper.ToResponse(&dummySpot)
+	response := h.coffeeSpotMapper.ToResponse(&dummySpot)
 
 	err := json.NewEncoder(w).Encode(response)
 	if err != nil {
-		http.Error(w, "Cannot serialize a model to JSON", http.StatusInternalServerError)
+		h.errorHander.WriteServerError(w, "Cannot serialize `CoffeeSpotResponse` to JSON")
 		return
 	}
 }

@@ -9,7 +9,8 @@ type Handlers struct {
 func NewHandlers() *Handlers {
 	healthHandler := NewHealthHandler()
 
-	coffeeSpotHandler := NewCoffeeSpotHandler()
+	errorHander := NewErrorHander()
+	coffeeSpotHandler := NewCoffeeSpotHandler(errorHander)
 
 	return &Handlers{HealthHandler: healthHandler, CoffeeSpotHandler: coffeeSpotHandler}
 }
