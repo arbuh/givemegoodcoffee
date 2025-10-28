@@ -3,6 +3,7 @@ package router
 
 import (
 	"givemegoodcoffee/internal/http/handler"
+	"givemegoodcoffee/internal/http/middleware"
 
 	"github.com/gorilla/mux"
 )
@@ -18,5 +19,5 @@ func NewRouter(handlers *handler.Handlers) *mux.Router {
 	// Coffee spot endpoints
 	api.HandleFunc("/coffeespot/{id}", handlers.CoffeeSpotHandler.GetCoffeeSpot).Methods("GET")
 
-	return r
+	return api
 }
