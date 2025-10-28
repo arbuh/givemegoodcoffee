@@ -25,13 +25,14 @@ func (h CoffeeSpotHandler) GetCoffeeSpot(w http.ResponseWriter, r *http.Request)
 
 	rawID := vars["id"]
 	if rawID == "" {
-		h.errorHander.WriteClientError(w, "The path parameter 'id' is mandatory", http.StatusBadRequest)
+		h.errorHander.HandleClientError(w, "The path parameter 'id' is mandatory", http.StatusBadRequest)
 		return
 	}
 
 	id, error := uuid.Parse(rawID)
 	if error != nil {
-		h.errorHander.WriteClientError(w, "The path parameter 'id' must be a valid UUID", http.StatusBadRequest)
+		//h.errorHander.HandleClientError(w, "The path parameter 'id' must be a valid UUID", http.StatusBadRequest)
+		h.errorHander.HandleServerError(w, "The path parameter 'id' must be a valid UUID")
 		return
 	}
 
@@ -57,7 +58,7 @@ func (h CoffeeSpotHandler) GetCoffeeSpot(w http.ResponseWriter, r *http.Request)
 
 	err := json.NewEncoder(w).Encode(response)
 	if err != nil {
-		h.errorHander.WriteServerError(w, "Cannot serialize `CoffeeSpotResponse` to JSON")
+		h.errorHander.HandleServerError(w, "Cannot serialize `CoffeeSpotResponse` to JSON")
 		return
 	}
 }

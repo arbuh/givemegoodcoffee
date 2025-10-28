@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"givemegoodcoffee/internal/http/mapper"
 	"net/http"
+	"log/slog"
 )
 
 type ErrorHander struct{ errorMapper *mapper.ErrorMapper }
@@ -13,7 +14,7 @@ func NewErrorHander() *ErrorHander {
 	return &ErrorHander{errorMapper: errorMapper}
 }
 
-func (h ErrorHander) WriteClientError(w http.ResponseWriter, errorString string, code int) {
+func (h ErrorHander) HandleClientError(w http.ResponseWriter, errorString string, code int) {
 	w.Header().Del("Content-Length")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
@@ -22,12 +23,13 @@ func (h ErrorHander) WriteClientError(w http.ResponseWriter, errorString string,
 
 	err := json.NewEncoder(w).Encode(response)
 	if err != nil {
-		h.WriteServerError(w, err.Error())
+		h.HandleServerError(w, err.Error())
 	}
 }
 
-// TODO: add logging
-func (h ErrorHander) WriteServerError(w http.ResponseWriter, errorString string) {
+func (h ErrorHander) HandleServerError(w http.ResponseWriter, errorString string) {
+	slog.Error(errorString)
+
 	w.Header().Del("Content-Length")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusInternalServerError)
