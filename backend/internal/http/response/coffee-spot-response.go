@@ -8,6 +8,6 @@ type CoffeeSpotResponse struct {
 }
 
 type AddressResponse struct {
-	CountryCode      string `json:"countryCode"`
-	Address string `json:"address"`
+	CountryCode string `json:"countryCode"`
+	Address     string `json:"address"`
 }

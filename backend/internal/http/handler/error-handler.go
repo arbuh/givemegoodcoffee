@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	httpctx "givemegoodcoffee/internal/http/context"
 	"givemegoodcoffee/internal/http/mapper"
 	"log/slog"
@@ -34,8 +33,7 @@ func (h ErrorHander) HandleServerError(w http.ResponseWriter, r *http.Request, e
 	requestID := ctx.Value(httpctx.RequestIDKey)
 
 	// TODO: use structural logging when we run the application in a server
-	msg := fmt.Sprintf("%s, requestID=%s\n", errorString, requestID)
-	slog.Error(msg)
+	slog.Error(errorString, slog.Any("requestID", requestID))
 
 	w.Header().Del("Content-Length")
 	w.Header().Set("Content-Type", "application/json")

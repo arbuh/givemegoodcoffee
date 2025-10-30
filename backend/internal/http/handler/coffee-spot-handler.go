@@ -31,7 +31,8 @@ func (h CoffeeSpotHandler) GetCoffeeSpot(w http.ResponseWriter, r *http.Request)
 
 	id, error := uuid.Parse(rawID)
 	if error != nil {
-		h.errorHander.HandleClientError(w, r, "The path parameter 'id' must be a valid UUID", http.StatusBadRequest)
+		//h.errorHander.HandleClientError(w, r, "The path parameter 'id' must be a valid UUID", http.StatusBadRequest)
+		h.errorHander.HandleServerError(w, r, "The path parameter 'id' must be a valid UUID")
 		return
 	}
 
