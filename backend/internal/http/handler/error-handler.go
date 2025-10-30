@@ -2,9 +2,11 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
+	httpctx "givemegoodcoffee/internal/http/context"
 	"givemegoodcoffee/internal/http/mapper"
-	"net/http"
 	"log/slog"
+	"net/http"
 )
 
 type ErrorHander struct{ errorMapper *mapper.ErrorMapper }
@@ -14,7 +16,7 @@ func NewErrorHander() *ErrorHander {
 	return &ErrorHander{errorMapper: errorMapper}
 }
 
-func (h ErrorHander) HandleClientError(w http.ResponseWriter, errorString string, code int) {
+func (h ErrorHander) HandleClientError(w http.ResponseWriter, r *http.Request, errorString string, code int) {
 	w.Header().Del("Content-Length")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
@@ -23,12 +25,17 @@ func (h ErrorHander) HandleClientError(w http.ResponseWriter, errorString string
 
 	err := json.NewEncoder(w).Encode(response)
 	if err != nil {
-		h.HandleServerError(w, err.Error())
+		h.HandleServerError(w, r, err.Error())
 	}
 }
 
-func (h ErrorHander) HandleServerError(w http.ResponseWriter, errorString string) {
-	slog.Error(errorString)
+func (h ErrorHander) HandleServerError(w http.ResponseWriter, r *http.Request, errorString string) {
+	ctx := r.Context()
+	requestID := ctx.Value(httpctx.RequestIDKey)
+
+	// TODO: use structural logging when we run the application in a server
+	msg := fmt.Sprintf("%s, requestID=%s\n", errorString, requestID)
+	slog.Error(msg)
 
 	w.Header().Del("Content-Length")
 	w.Header().Set("Content-Type", "application/json")

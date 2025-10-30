@@ -11,6 +11,8 @@ import (
 func NewRouter(handlers *handler.Handlers) *mux.Router {
 	r := mux.NewRouter()
 
+	r.Use(middleware.RequestID)
+
 	api := r.PathPrefix("/api/v1").Subrouter()
 
 	// Health endpoints
@@ -19,5 +21,5 @@ func NewRouter(handlers *handler.Handlers) *mux.Router {
 	// Coffee spot endpoints
 	api.HandleFunc("/coffeespot/{id}", handlers.CoffeeSpotHandler.GetCoffeeSpot).Methods("GET")
 
-	return api
+	return r
 }
