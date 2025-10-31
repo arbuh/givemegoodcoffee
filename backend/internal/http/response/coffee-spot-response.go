@@ -4,10 +4,10 @@ package response
 type CoffeeSpotResponse struct {
 	Name     string          `json:"name"`
 	Type     string          `json:"type"`
-	Location AddressResponse `json:"location"`
+	Location LocationResponse `json:"location"`
 }
 
-type AddressResponse struct {
+type LocationResponse struct {
 	CountryCode string `json:"countryCode"`
 	Address     string `json:"address"`
 }

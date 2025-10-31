@@ -20,6 +20,11 @@ func NewCoffeeSpotHandler(errorHander *ErrorHander) *CoffeeSpotHandler {
 	return &CoffeeSpotHandler{coffeeSpotMapper, errorHander}
 }
 
+func PostCoffeeSpot(w http.ResponseWriter, r *http.Request){
+	var request response.CoffeeSpotResponse
+	body := r.Body.Read()
+}
+
 func (h CoffeeSpotHandler) GetCoffeeSpot(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 

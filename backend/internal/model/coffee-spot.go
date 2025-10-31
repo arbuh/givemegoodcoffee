@@ -2,6 +2,8 @@
 package model
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 )
 
@@ -23,8 +25,8 @@ const (
 	Other       CoffeeSpotType = "other"
 )
 
-/*
-We don't need this functionality yet
+var allTypes = []CoffeeSpotType{Cafe, CoffeeShop, Restraurant, Bakery, GasStation, Other}
+
 // TODO: add a unit-test
 func (t CoffeeSpotType) IsValid() bool {
 	switch t {
@@ -34,4 +36,21 @@ func (t CoffeeSpotType) IsValid() bool {
 		return false
 	}
 }
-*/
+
+func CoffeeSpotTypeFromString(s string) (CoffeeSpotType, error) {
+	t := CoffeeSpotType(s)
+
+	if t.IsValid() {
+		return t, nil
+	} else {
+		return "", UnsupportedCoffeeSpotTypeError{unsupportedType: s}
+	}
+}
+
+type UnsupportedCoffeeSpotTypeError struct {
+	unsupportedType string
+}
+
+func (e UnsupportedCoffeeSpotTypeError) Error() string {
+	return fmt.Sprintf("Unsupported coffee spot type '%s', it should be one of %v", e.unsupportedType, allTypes)
+}
