@@ -20,6 +20,7 @@ func NewRouter(handlers *handler.Handlers) *mux.Router {
 
 	// Coffee spot endpoints
 	api.HandleFunc("/coffeespot/{id}", handlers.CoffeeSpotHandler.GetCoffeeSpot).Methods("GET")
+	api.HandleFunc("/coffeespot", handlers.CoffeeSpotHandler.PostCoffeeSpot).Methods("POST")
 
 	return r
 }

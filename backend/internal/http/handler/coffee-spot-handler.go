@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"givemegoodcoffee/internal/http/mapper"
+	"givemegoodcoffee/internal/http/request"
 	"givemegoodcoffee/internal/model"
 	"net/http"
 
@@ -20,9 +21,31 @@ func NewCoffeeSpotHandler(errorHander *ErrorHander) *CoffeeSpotHandler {
 	return &CoffeeSpotHandler{coffeeSpotMapper, errorHander}
 }
 
-func PostCoffeeSpot(w http.ResponseWriter, r *http.Request){
-	var request response.CoffeeSpotResponse
-	body := r.Body.Read()
+func (h CoffeeSpotHandler) PostCoffeeSpot(w http.ResponseWriter, r *http.Request) {
+	var request request.CoffeeSpotRequest
+
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		h.errorHander.HandleClientError(w, r, "Cannot parse the request: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	var spot *model.CoffeeSpot
+	spot, err = h.coffeeSpotMapper.FromRequest(&request)
+	if err != nil {
+		h.errorHander.HandleClientError(w, r, "Cannot map the request: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	response := h.coffeeSpotMapper.ToResponse(spot)
+
+	err = json.NewEncoder(w).Encode(response)
+	if err != nil {
+		h.errorHander.HandleServerError(w, r, "Cannot serialize `CoffeeSpotResponse` to JSON: "+err.Error())
+		return
+	}
 }
 
 func (h CoffeeSpotHandler) GetCoffeeSpot(w http.ResponseWriter, r *http.Request) {
@@ -36,8 +59,7 @@ func (h CoffeeSpotHandler) GetCoffeeSpot(w http.ResponseWriter, r *http.Request)
 
 	id, error := uuid.Parse(rawID)
 	if error != nil {
-		//h.errorHander.HandleClientError(w, r, "The path parameter 'id' must be a valid UUID", http.StatusBadRequest)
-		h.errorHander.HandleServerError(w, r, "The path parameter 'id' must be a valid UUID")
+		h.errorHander.HandleClientError(w, r, "The path parameter 'id' must be a valid UUID", http.StatusBadRequest)
 		return
 	}
 
