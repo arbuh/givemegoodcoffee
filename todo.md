@@ -16,6 +16,7 @@
 ## Make prod-ready
 
 [ ] Add structural logging
+[ ] Implement graceful application shutdown
 
 ## Nice to have
 
