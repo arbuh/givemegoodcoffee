@@ -33,3 +33,6 @@ restart: stop start
 clean:
 	@echo "Cleaning $(SERVER_NAME) binaries"
 	@rm -rf bin/
+
+test:
+	go test ./...
