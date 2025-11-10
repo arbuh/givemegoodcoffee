@@ -79,6 +79,19 @@ func TestCoffeeSpotMapper_FromRequest(t *testing.T) {
 			want:    coffeeSpot,
 			wantErr: false,
 		},
+		{
+			name: "return error if coffee spot type wrong",
+			request: &request.CoffeeSpotRequest{
+				Name: "Koefie Coffee",
+				Type: "eatery",
+				Location: request.LocationRequest{
+					CountryCode: "nl",
+					Address:     "Jan de Vriesstraat 7, Uden",
+				},
+			},
+			want:    nil,
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
