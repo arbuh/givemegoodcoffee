@@ -10,8 +10,10 @@
 [X] Implement handler for the new coffee spots
 [X] Implement the coffee spot POST endpoint
 [X] Implement unit-tests, play with the coverage
-[ ] Implement unit-tests for mappers errors and spot type mappers
-[ ] Implement Docker environment to run the application and a database
+[X] Implement unit-tests for mappers errors and spot type mappers
+[X] Implement Docker environment to run the application and a database
+[ ] Connect to the database
+[ ] Implement the database client
 [ ] Implement storing of coffee spots in the database
 
 ## Make prod-ready

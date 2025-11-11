@@ -1,0 +1,14 @@
+name: givemegoodcoffee
+
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: givemegoodcoffee
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: givemegoodcoffee_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.data/postgres:/var/lib/postgresql
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
