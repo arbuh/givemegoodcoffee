@@ -12,7 +12,7 @@
 [X] Implement unit-tests, play with the coverage
 [X] Implement unit-tests for mappers errors and spot type mappers
 [X] Implement Docker environment to run the application and a database
-[ ] Connect to the database
+[X] Connect to the database
 [ ] Implement the database client
 [ ] Implement storing of coffee spots in the database
 
