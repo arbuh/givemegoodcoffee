@@ -13,9 +13,10 @@
 [X] Implement unit-tests for mappers errors and spot type mappers
 [X] Implement Docker environment to run the application and a database
 [X] Connect to the database
-[ ] Implement the database client
+[ ] Implement a separate entity for the connection pool
+[ ] Implement the coffee spot repo
+[ ] Implement non-hardcoded configs for the database
 [ ] Implement DI for logging
-[ ] Implement storing of coffee spots in the database
 
 ## Make prod-ready
 
