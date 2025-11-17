@@ -14,6 +14,7 @@
 [X] Implement Docker environment to run the application and a database
 [X] Connect to the database
 [ ] Implement the database client
+[ ] Implement DI for logging
 [ ] Implement storing of coffee spots in the database
 
 ## Make prod-ready

@@ -4,6 +4,7 @@ import (
 	"givemegoodcoffee/internal/http/handler"
 	"givemegoodcoffee/internal/http/router"
 	"log"
+	"os"
 	"log/slog"
 	"net/http"
 )
@@ -16,5 +17,6 @@ func main() {
 	if err := http.ListenAndServe(":8080", router); err != nil {
 		// TODO: use structural logging when we run the application in a server
 		log.Fatal(err)
+		os.Exit(1)
 	}
 }
