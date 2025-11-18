@@ -2,40 +2,31 @@
 package repository
 
 import (
-	"context"
+	"givemegoodcoffee/internal/database"
 	"givemegoodcoffee/internal/model"
-	"os"
-
-	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/google/uuid"
 )
 
 type CoffeeSpotRepository interface {
-	Save(spot model.CoffeeSpot)
-	Get(id uuid.UUID)
+	Save(spot *model.CoffeeSpot)
+	Get(id uuid.UUID) *model.CoffeeSpot
 }
 
 type CoffeeSpotPostgresRepository struct {
-	pool *pgxpool.Pool
+	connection *database.PostgresConnection
 }
 
-// TODO: Create a separate instance for the pool
-func NewCoffeeSpotRepository() (*CoffeeSpotRepository, error) {
-	dbpool, err := pgxpool.New(context.Background(), os.Getenv("DATABASE_URL"))
-	if err != nil {
-		return nil, err
-	}
-
-	return &CoffeeSpotPostgresRepository{pool: dbpool}, nil
+func NewCoffeeSpotRepository(connection *database.PostgresConnection) CoffeeSpotRepository {
+	return &CoffeeSpotPostgresRepository{connection}
 }
 
 // Get implements CoffeeSpotRepository.
-func (c CoffeeSpotPostgresRepository) Get(id uuid.UUID) {
+func (c CoffeeSpotPostgresRepository) Get(id uuid.UUID) *model.CoffeeSpot {
 	panic("unimplemented")
 }
 
 // Save implements CoffeeSpotRepository.
-func (c CoffeeSpotPostgresRepository) Save(spot model.CoffeeSpot) {
+func (c CoffeeSpotPostgresRepository) Save(spot *model.CoffeeSpot) {
 	panic("unimplemented")
 }

@@ -1,20 +1,31 @@
 package main
 
 import (
+	"context"
+	"givemegoodcoffee/internal/database"
 	"givemegoodcoffee/internal/http/handler"
 	"givemegoodcoffee/internal/http/router"
 	"log"
-	"os"
 	"log/slog"
 	"net/http"
+	"os"
 )
 
 func main() {
+	ctx := context.Background()
+
+	connectionStr := "postgres://givemegoodcoffee:mypassword@localhost:5432/givemegoodcoffee_dev"
+	_, err := database.NewPostgresConnection(ctx, connectionStr)
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(1)
+	}
+
 	handlers := handler.NewHandlers()
 	router := router.NewRouter(handlers)
 
 	slog.Info("Server starting on :8080")
-	if err := http.ListenAndServe(":8080", router); err != nil {
+	if err = http.ListenAndServe(":8080", router); err != nil {
 		// TODO: use structural logging when we run the application in a server
 		log.Fatal(err)
 		os.Exit(1)

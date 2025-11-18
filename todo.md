@@ -16,6 +16,7 @@
 [X] Implement a separate entity for the connection pool
 [ ] Implement the coffee spot repo
 [ ] Implement non-hardcoded configs for the database
+[ ] Use the repo in the endpoints
 [ ] Implement DI for logging
 
 ## Make prod-ready
