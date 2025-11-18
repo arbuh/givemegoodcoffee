@@ -26,7 +26,6 @@ func NewCoffeeSpotRepository() (*CoffeeSpotRepository, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer dbpool.Close()
 
 	return &CoffeeSpotPostgresRepository{pool: dbpool}, nil
 }
