@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"givemegoodcoffee/internal/config"
 	"givemegoodcoffee/internal/database"
 	"givemegoodcoffee/internal/http/handler"
 	"givemegoodcoffee/internal/http/router"
@@ -14,8 +15,23 @@ import (
 func main() {
 	ctx := context.Background()
 
-	connectionStr := "postgres://givemegoodcoffee:mypassword@localhost:5432/givemegoodcoffee_dev"
-	_, err := database.NewPostgresConnection(ctx, connectionStr)
+	env := os.Getenv("APP_ENV")
+	if env == "" {
+		env = config.DEV
+	}
+
+	slog.Info("Starting application", "env", env)
+
+	var err error
+
+	var cfg *config.Config
+	cfg, err = config.LoadConfig(env)
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(1)
+	}
+
+	_, err = database.NewPostgresConnection(ctx, cfg)
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)

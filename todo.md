@@ -15,7 +15,7 @@
 [X] Connect to the database
 [X] Implement a separate entity for the connection pool
 [ ] Implement the coffee spot repo
-[ ] Implement non-hardcoded configs for the database
+[X] Implement provision of configs considering the environment
 [ ] Use the repo in the endpoints
 [ ] Implement DI for logging
 
@@ -26,4 +26,5 @@
 
 ## Nice to have
 
+[ ] Define ENV as SSOT for both the application and the database container
 [ ] Implement UUID service
