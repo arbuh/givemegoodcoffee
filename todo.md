@@ -17,6 +17,7 @@
 [ ] Implement the coffee spot repo
 [X] Implement provision of configs considering the environment
 [ ] Use the repo in the endpoints
+[ ] Move makefile to root
 [ ] Implement DI for logging
 
 ## Make prod-ready
