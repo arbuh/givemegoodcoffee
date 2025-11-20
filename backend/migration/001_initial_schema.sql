@@ -1,0 +1,9 @@
+-- A UUID generator
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE IF NOT EXISTS coffee_spots (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    data JSONB NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);

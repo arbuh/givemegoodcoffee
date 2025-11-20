@@ -4,8 +4,16 @@ import (
 	"context"
 	"fmt"
 	"givemegoodcoffee/internal/config"
+	"log/slog"
+	"os"
+	"path/filepath"
+	"sort"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+const (
+	migrationDir string = "migration"
 )
 
 type PostgresConnection struct {
@@ -35,4 +43,29 @@ func NewPostgresConnection(ctx context.Context, config *config.Config) (*Postgre
 
 func (c *PostgresConnection) Close() {
 	c.Pool.Close()
+}
+
+func (c *PostgresConnection) RunMigrations(ctx context.Context) error {
+	files, err := filepath.Glob(filepath.Join(migrationDir, "*.sql"))
+	if err != nil {
+		return fmt.Errorf("cannot find migration files: %w", err)
+	}
+
+	sort.Strings(files)
+
+	for _, file := range files {
+
+		slog.Info("Running migration: " + filepath.Base(file))
+
+		sql, err := os.ReadFile(file)
+		if err != nil {
+			return fmt.Errorf("failed to read %s: %w", file, err)
+		}
+
+		if _, err := c.Pool.Exec(ctx, string(sql)); err != nil {
+			return fmt.Errorf("failed to execute %s: %w", file, err)
+		}
+	}
+
+	return nil
 }

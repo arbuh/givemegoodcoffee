@@ -31,7 +31,16 @@ func main() {
 		os.Exit(1)
 	}
 
-	_, err = database.NewPostgresConnection(ctx, cfg)
+	slog.Info("Connecting to database")
+	var connection database.Connection
+	connection, err = database.NewPostgresConnection(ctx, cfg)
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(1)
+	}
+	defer connection.Close()
+
+	err = connection.RunMigrations(ctx)
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)
