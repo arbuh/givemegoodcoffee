@@ -8,10 +8,10 @@ import (
 )
 
 type CoffeeSpot struct {
-	ID       uuid.UUID
-	Name     string
-	Type     CoffeeSpotType
-	Location Location
+	ID       uuid.UUID      `json:"id"`
+	Name     string         `json:"name"`
+	Type     CoffeeSpotType `json:"type"`
+	Location Location       `json:"location"`
 }
 
 type CoffeeSpotType string
@@ -27,7 +27,6 @@ const (
 
 var allTypes = []CoffeeSpotType{Cafe, CoffeeShop, Restraurant, Bakery, GasStation, Other}
 
-// TODO: add a unit-test
 func (t CoffeeSpotType) IsValid() bool {
 	switch t {
 	case Cafe, CoffeeShop, Restraurant, Bakery, GasStation, Other:

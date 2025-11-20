@@ -2,6 +2,8 @@
 package repository
 
 import (
+	"context"
+	"fmt"
 	"givemegoodcoffee/internal/database"
 	"givemegoodcoffee/internal/model"
 
@@ -9,8 +11,8 @@ import (
 )
 
 type CoffeeSpotRepository interface {
-	Save(spot *model.CoffeeSpot)
-	Get(id uuid.UUID) *model.CoffeeSpot
+	Save(ctx context.Context, spot *model.CoffeeSpot) error
+	Get(ctx context.Context, id uuid.UUID) (*model.CoffeeSpot, error)
 }
 
 type CoffeeSpotPostgresRepository struct {
@@ -22,11 +24,26 @@ func NewCoffeeSpotRepository(connection *database.PostgresConnection) CoffeeSpot
 }
 
 // Get implements CoffeeSpotRepository.
-func (c CoffeeSpotPostgresRepository) Get(id uuid.UUID) *model.CoffeeSpot {
-	panic("unimplemented")
+func (c CoffeeSpotPostgresRepository) Get(ctx context.Context, id uuid.UUID) (*model.CoffeeSpot, error) {
+	query := "SELECT data from coffee_spots WHERE id = $1"
+
+	var spot model.CoffeeSpot
+	err := c.connection.Pool.QueryRow(ctx, query, id).Scan(&spot)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get coffee spot: %w", err)
+	}
+
+	return &spot, nil
 }
 
 // Save implements CoffeeSpotRepository.
-func (c CoffeeSpotPostgresRepository) Save(spot *model.CoffeeSpot) {
-	panic("unimplemented")
+func (c CoffeeSpotPostgresRepository) Save(ctx context.Context, spot *model.CoffeeSpot) error {
+	query := "INSERT INTO coffee_spots (id, data) VALUES $1"
+
+	_, err := c.connection.Pool.Exec(ctx, query, spot.ID, spot)
+	if err != nil {
+		return fmt.Errorf("failed to save coffee spot: %w", err)
+	}
+
+	return nil
 }
