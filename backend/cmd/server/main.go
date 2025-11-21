@@ -6,6 +6,7 @@ import (
 	"givemegoodcoffee/internal/database"
 	"givemegoodcoffee/internal/http/handler"
 	"givemegoodcoffee/internal/http/router"
+	"givemegoodcoffee/internal/repository"
 	"log"
 	"log/slog"
 	"net/http"
@@ -46,7 +47,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	handlers := handler.NewHandlers()
+	coffeeSpotRepository := repository.NewCoffeeSpotRepository(connection)
+	handlers := handler.NewHandlers(coffeeSpotRepository)
 	router := router.NewRouter(handlers)
 
 	slog.Info("Server starting on :8080")

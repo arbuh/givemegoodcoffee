@@ -3,11 +3,13 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"givemegoodcoffee/internal/database"
 	"givemegoodcoffee/internal/model"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 )
 
 type CoffeeSpotRepository interface {
@@ -19,8 +21,9 @@ type CoffeeSpotPostgresRepository struct {
 	connection *database.PostgresConnection
 }
 
-func NewCoffeeSpotRepository(connection *database.PostgresConnection) CoffeeSpotRepository {
-	return &CoffeeSpotPostgresRepository{connection}
+func NewCoffeeSpotRepository(connection database.Connection) CoffeeSpotRepository {
+	pgConnection, _ := connection.(*database.PostgresConnection)
+	return &CoffeeSpotPostgresRepository{pgConnection}
 }
 
 // Get implements CoffeeSpotRepository.
@@ -29,6 +32,11 @@ func (c CoffeeSpotPostgresRepository) Get(ctx context.Context, id uuid.UUID) (*m
 
 	var spot model.CoffeeSpot
 	err := c.connection.Pool.QueryRow(ctx, query, id).Scan(&spot)
+
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, nil
+	}
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to get coffee spot: %w", err)
 	}
