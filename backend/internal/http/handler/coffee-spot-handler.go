@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"givemegoodcoffee/internal/http/mapper"
 	"givemegoodcoffee/internal/http/request"
 	"givemegoodcoffee/internal/http/util"
@@ -33,8 +34,15 @@ func (h CoffeeSpotHandler) PostCoffeeSpot(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	// TODO: move ID generation to a special service
+	id, err := uuid.NewRandom()
+	if err != nil {
+		h.errorHander.HandleServerError(w, r, "Cannot generate ID for spot: "+err.Error())
+		return
+	}
+
 	var spot *model.CoffeeSpot
-	spot, err = h.coffeeSpotMapper.FromRequest(&request)
+	spot, err = h.coffeeSpotMapper.FromRequest(id, &request)
 	if err != nil {
 		h.errorHander.HandleClientError(w, r, "Cannot map the request: "+err.Error(), http.StatusBadRequest)
 		return
@@ -47,14 +55,9 @@ func (h CoffeeSpotHandler) PostCoffeeSpot(w http.ResponseWriter, r *http.Request
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-
-	response := h.coffeeSpotMapper.ToResponse(spot)
-
-	err = json.NewEncoder(w).Encode(response)
-	if err != nil {
-		h.errorHander.HandleServerError(w, r, "Cannot serialize `CoffeeSpotResponse` to JSON: "+err.Error())
-		return
-	}
+	w.WriteHeader(http.StatusCreated)
+	responseBody := fmt.Sprintf(`{"id":"%s"}`, id)
+	w.Write([]byte(responseBody))
 }
 
 func (h CoffeeSpotHandler) GetCoffeeSpot(w http.ResponseWriter, r *http.Request) {

@@ -26,15 +26,14 @@ func (m CoffeeSpotMapper) ToResponse(spot *model.CoffeeSpot) *response.CoffeeSpo
 	}
 }
 
-func (m CoffeeSpotMapper) FromRequest(request *request.CoffeeSpotRequest) (*model.CoffeeSpot, error) {
+func (m CoffeeSpotMapper) FromRequest(id uuid.UUID, request *request.CoffeeSpotRequest) (*model.CoffeeSpot, error) {
 	t, err := model.CoffeeSpotTypeFromString(request.Type)
 	if err != nil {
 		return nil, err
 	}
 
 	spot := &model.CoffeeSpot{
-		// TODO: implement a special UUID service
-		ID:   uuid.UUID{},
+		ID:   id,
 		Name: request.Name,
 		Type: t,
 		Location: model.Location{

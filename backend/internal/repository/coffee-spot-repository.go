@@ -46,7 +46,7 @@ func (c CoffeeSpotPostgresRepository) Get(ctx context.Context, id uuid.UUID) (*m
 
 // Save implements CoffeeSpotRepository.
 func (c CoffeeSpotPostgresRepository) Save(ctx context.Context, spot *model.CoffeeSpot) error {
-	query := "INSERT INTO coffee_spots (id, data) VALUES $1"
+	query := "INSERT INTO coffee_spots (id, data) VALUES ($1, $2)"
 
 	_, err := c.connection.Pool.Exec(ctx, query, spot.ID, spot)
 	if err != nil {
