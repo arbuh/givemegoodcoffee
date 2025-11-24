@@ -17,6 +17,7 @@ func NewCoffeeSpotMapper() *CoffeeSpotMapper {
 
 func (m CoffeeSpotMapper) ToResponse(spot *model.CoffeeSpot) *response.CoffeeSpotResponse {
 	return &response.CoffeeSpotResponse{
+		ID:   spot.ID.String(),
 		Name: spot.Name,
 		Type: string(spot.Type),
 		Location: response.LocationResponse{
