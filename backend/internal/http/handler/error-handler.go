@@ -8,11 +8,14 @@ import (
 	"net/http"
 )
 
-type ErrorHander struct{ errorMapper *mapper.ErrorMapper }
+type ErrorHander struct {
+	errorMapper *mapper.ErrorMapper
+	logger      *slog.Logger
+}
 
-func NewErrorHander() *ErrorHander {
+func NewErrorHander(logger *slog.Logger) *ErrorHander {
 	errorMapper := mapper.NewErrorMapper()
-	return &ErrorHander{errorMapper: errorMapper}
+	return &ErrorHander{errorMapper: errorMapper, logger: logger}
 }
 
 func (h ErrorHander) HandleClientError(w http.ResponseWriter, r *http.Request, errorString string, code int) {
@@ -32,8 +35,7 @@ func (h ErrorHander) HandleServerError(w http.ResponseWriter, r *http.Request, e
 	ctx := r.Context()
 	requestID := ctx.Value(httpctx.RequestIDKey)
 
-	// TODO: use structural logging when we run the application in a server
-	slog.Error(errorString, slog.Any("requestID", requestID))
+	h.logger.Error(errorString, slog.Any("requestID", requestID))
 
 	w.Header().Del("Content-Length")
 	w.Header().Set("Content-Type", "application/json")

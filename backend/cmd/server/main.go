@@ -16,6 +16,8 @@ import (
 func main() {
 	ctx := context.Background()
 
+	logger := slog.Default()
+
 	env := os.Getenv("APP_ENV")
 	if env == "" {
 		env = config.DEV
@@ -48,7 +50,7 @@ func main() {
 	}
 
 	coffeeSpotRepository := repository.NewCoffeeSpotRepository(connection)
-	handlers := handler.NewHandlers(coffeeSpotRepository)
+	handlers := handler.NewHandlers(coffeeSpotRepository, logger)
 	router := router.NewRouter(handlers)
 
 	slog.Info("Server starting on :8080")

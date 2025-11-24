@@ -16,10 +16,9 @@
 [X] Implement a separate entity for the connection pool
 [X] Implement the coffee spot repo
 [X] Implement provision of configs considering the environment
-[ ] Use the repo in the endpoints
-[ ] Move error handlers to util?
+[X] Use the repo in the endpoints
+[ ] Use the injected logger in the whole application
 [ ] Move makefile to root
-[ ] Implement DI for logging
 
 ## Make prod-ready
 
