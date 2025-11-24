@@ -17,7 +17,7 @@
 [X] Implement the coffee spot repo
 [X] Implement provision of configs considering the environment
 [X] Use the repo in the endpoints
-[ ] Use the injected logger in the whole application
+[X] Use the injected logger in the whole application
 [ ] Move makefile to root
 
 ## Make prod-ready

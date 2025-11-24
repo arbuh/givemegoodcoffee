@@ -17,10 +17,11 @@ const (
 )
 
 type PostgresConnection struct {
-	Pool *pgxpool.Pool
+	Pool   *pgxpool.Pool
+	logger *slog.Logger
 }
 
-func NewPostgresConnection(ctx context.Context, config *config.Config) (*PostgresConnection, error) {
+func NewPostgresConnection(ctx context.Context, config *config.Config, logger *slog.Logger) (*PostgresConnection, error) {
 
 	pgxConfig, err := pgxpool.ParseConfig(config.Database.PostgresURL)
 	if err != nil {
@@ -37,7 +38,7 @@ func NewPostgresConnection(ctx context.Context, config *config.Config) (*Postgre
 		return nil, fmt.Errorf("unable to ping database: %w", err)
 	}
 
-	connection := &PostgresConnection{Pool: pool}
+	connection := &PostgresConnection{Pool: pool, logger: logger}
 	return connection, nil
 }
 
@@ -55,7 +56,7 @@ func (c *PostgresConnection) RunMigrations(ctx context.Context) error {
 
 	for _, file := range files {
 
-		slog.Info("Running migration: " + filepath.Base(file))
+		c.logger.Info("Running migration: " + filepath.Base(file))
 
 		sql, err := os.ReadFile(file)
 		if err != nil {

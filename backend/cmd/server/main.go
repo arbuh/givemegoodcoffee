@@ -7,7 +7,6 @@ import (
 	"givemegoodcoffee/internal/http/handler"
 	"givemegoodcoffee/internal/http/router"
 	"givemegoodcoffee/internal/repository"
-	"log"
 	"log/slog"
 	"net/http"
 	"os"
@@ -16,12 +15,13 @@ import (
 func main() {
 	ctx := context.Background()
 
-	logger := slog.Default()
-
 	env := os.Getenv("APP_ENV")
 	if env == "" {
 		env = config.DEV
 	}
+
+	// TODO: Create logger depending on env, use a structural logger for deployments
+	logger := slog.Default()
 
 	slog.Info("Starting application", "env", env)
 
@@ -30,23 +30,20 @@ func main() {
 	var cfg *config.Config
 	cfg, err = config.LoadConfig(env)
 	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
+		exitOnError(err, logger)
 	}
 
 	slog.Info("Connecting to database")
 	var connection database.Connection
-	connection, err = database.NewPostgresConnection(ctx, cfg)
+	connection, err = database.NewPostgresConnection(ctx, cfg, logger)
 	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
+		exitOnError(err, logger)
 	}
 	defer connection.Close()
 
 	err = connection.RunMigrations(ctx)
 	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
+		exitOnError(err, logger)
 	}
 
 	coffeeSpotRepository := repository.NewCoffeeSpotRepository(connection)
@@ -55,8 +52,11 @@ func main() {
 
 	slog.Info("Server starting on :8080")
 	if err = http.ListenAndServe(":8080", router); err != nil {
-		// TODO: use structural logging when we run the application in a server
-		log.Fatal(err)
-		os.Exit(1)
+		exitOnError(err, logger)
 	}
+}
+
+func exitOnError(err error, logger *slog.Logger) {
+	logger.Error("application failed", "error", err)
+	os.Exit(1)
 }
