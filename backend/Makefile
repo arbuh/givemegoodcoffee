@@ -3,6 +3,16 @@ SERVER_BINARY := ./bin/server
 SERVER_ENTRY_POINT := ./cmd/server/
 SERVER_PID_FILE := .app.pid
 
+help:
+	@echo "Avaliable targets:"
+	@echo "build		- Build binaries"
+	@echo "run			- Run service"
+	@echo "start		- Run service in background"
+	@echo "stop			- Stop service running in background"
+	@echo "restart		- Rebuild binaries and restart service"
+	@echo "clean		- Clean binaries"
+	@echo "test			- Run all tests"
+
 build:
 	@echo "Building $(SERVER_NAME)"
 	@mkdir -p bin

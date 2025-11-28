@@ -18,7 +18,7 @@
 [X] Implement provision of configs considering the environment
 [X] Use the repo in the endpoints
 [X] Use the injected logger in the whole application
-[ ] Move makefile to root
+[X] Move makefile to root
 
 ## Make prod-ready
 
